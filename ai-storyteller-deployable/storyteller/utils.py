@@ -17,3 +17,22 @@ def zip_folder(folder_path: str, out_bytes_io: io.BytesIO):
                 full = os.path.join(root, f)
                 rel = os.path.relpath(full, folder_path)
                 zf.write(full, arcname=rel)
+def clamp_sentences(text: str, max_sentences: int = 3) -> str:
+    """
+    Keep only the first `max_sentences` sentences from text.
+    """
+    import re
+    sentences = re.split(r'(?<=[.!?]) +', text)
+    return " ".join(sentences[:max_sentences])
+
+
+def safe_truncate(text: str, max_chars: int = 500) -> str:
+    """
+    Truncate text safely without cutting words mid-way.
+    """
+    if len(text) <= max_chars:
+        return text
+    truncated = text[:max_chars].rsplit(" ", 1)[0]
+    return truncated + "..."
+
+
